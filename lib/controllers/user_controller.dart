@@ -18,7 +18,6 @@ class UserController extends GetxController {
   static UserController to = Get.find();
   DataStoreService _datastoreService = DataStoreService();
   AuthService _authService = AuthService();
-  //AnalyticsService _analyticsService = AnalyticsService();
   Rxn<AuthUser> currentUser = Rxn<AuthUser>();
   RxBool isLoading = false.obs;
   RxString imageUrl = ''.obs;
@@ -31,19 +30,15 @@ class UserController extends GetxController {
 
   @override
   void onInit() {
-    getCurrUser();
-
+    getCurrentUser();
     super.onInit();
   }
 
-  Future<void> getCurrUser() async {
+  Future<void> getCurrentUser() async {
     AuthUser authUser = await _authService.getCurrentUser();
-    print('Get the user');
-    print(authUser.userId);
     email.value = await _authService.getUserEmail();
     displayName.value = await _authService.getUserDisplayName();
     currentUser.value = authUser;
-    print(currentUser.value);
   }
 
   Future<void> getPosts() async {
@@ -80,8 +75,6 @@ class UserController extends GetxController {
   @override
   void onReady() {
     getPosts();
-    print('List');
-    print(myPosts.length);
     super.onReady();
   }
 

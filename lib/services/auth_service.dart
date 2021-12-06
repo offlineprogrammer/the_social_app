@@ -16,7 +16,6 @@ class AuthService {
   }
 
   Future<String> getUserEmail() async {
-    AuthSession authSessions = await Amplify.Auth.fetchAuthSession();
     String _email = '';
 
     try {
@@ -25,16 +24,14 @@ class AuthService {
         (element) => element.userAttributeKey.toString() == 'email',
       );
       _email = _authUserAttribute.value.toString();
-    } on AuthException catch (e) {
-      print(e.message);
+    } catch (e) {
+      print(e);
     }
     return _email;
   }
 
   Future<String> getUserDisplayName() async {
-    AuthSession authSessions = await Amplify.Auth.fetchAuthSession();
     String _displayName = '';
-
     try {
       var res = await Amplify.Auth.fetchUserAttributes();
       final _authUserAttribute = res.firstWhere(
@@ -42,7 +39,6 @@ class AuthService {
             element.userAttributeKey.toString() == 'custom:displayname',
       );
       _displayName = _authUserAttribute.value.toString();
-      print(_displayName);
     } catch (e) {
       print(e);
     }
@@ -74,20 +70,12 @@ class AuthService {
                     const CognitoUserAttributeKey.custom('displayname'),
                 value: _authUserAttribute.value.toString())
           ];
-
-          var res1 =
-              await Amplify.Auth.updateUserAttributes(attributes: attributes);
-          print(authUser);
+          await Amplify.Auth.updateUserAttributes(attributes: attributes);
         }
-
-        // await _dataStoreService.saveUser(user);
       } on AuthException catch (e) {
         print(e.message);
       }
-
-      //  await getCurrentUser();
-      // currentUser.value = await _dataStoreService.getUser(authUser.userId);
-    } else {}
+    }
   }
 
   updateUserDisplayName(String displayName) async {
@@ -98,6 +86,6 @@ class AuthService {
           value: displayName)
     ];
 
-    var res = await Amplify.Auth.updateUserAttributes(attributes: attributes);
+    await Amplify.Auth.updateUserAttributes(attributes: attributes);
   }
 }

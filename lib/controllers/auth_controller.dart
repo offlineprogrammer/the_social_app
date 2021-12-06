@@ -35,7 +35,6 @@ class AuthController extends GetxController {
         switch (hubEvent.eventName) {
           case "SIGNED_IN":
             {
-              // await _authService.saveUser();
               print("USER IS SIGNED IN");
             }
             break;

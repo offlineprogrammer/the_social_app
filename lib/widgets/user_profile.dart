@@ -49,7 +49,7 @@ class UserProfile extends GetWidget<UserController> {
               () => (controller.currentUser.value != null &&
                       controller.displayName.value.isEmpty == false)
                   ? Text(
-                      controller.displayName.value!,
+                      controller.displayName.value,
                       style: Theme.of(context).textTheme.headline6,
                       textAlign: TextAlign.center,
                     )
