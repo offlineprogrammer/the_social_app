@@ -1,8 +1,12 @@
 import 'dart:io';
 
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_authenticator/amplify_authenticator.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:the_social_app/models/Post.dart';
+import 'package:the_social_app/services/auth_service.dart';
 import 'package:the_social_app/services/datastore_service.dart';
 import 'package:the_social_app/widgets/post_item.dart';
 import 'package:amplify_storage_s3/amplify_storage_s3.dart';
@@ -11,13 +15,16 @@ import 'package:uuid/uuid.dart';
 
 class PostController extends GetxController {
   static PostController to = Get.find();
-  DataStoreService _datastoreService = DataStoreService();
+  final DataStoreService _datastoreService = DataStoreService();
+  final AuthService _authService = AuthService();
   RxBool isImageSelected = false.obs;
   late File _imageFile;
   var _image = PickedFile("").obs;
   final _picker = ImagePicker();
   RxString imageUrl = ''.obs;
   RxBool isLoading = false.obs;
+  final TextEditingController postTextController = TextEditingController();
+  final FocusNode postTextFocusNode = FocusNode();
 
   @override
   void onInit() {
@@ -63,4 +70,16 @@ class PostController extends GetxController {
   }
 
   Future<void> imgFromGallery() async {}
+
+  Future<void> addPost() async {
+    AuthUser _authUser = await _authService.getCurrentUser();
+    Post _post = Post(
+        content: postTextController.text,
+        postImageUrl: imageUrl.value,
+        userID: _authUser.userId);
+
+    await _datastoreService.addPost(_post);
+    postTextController.clear();
+    postTextController.clear();
+  }
 }

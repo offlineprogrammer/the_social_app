@@ -28,7 +28,7 @@ class CreatePost extends GetWidget<PostController> {
                 : Container(
                     color: Color(0xffE1E5E4),
                     height: 150,
-                    child: Text('Test'),
+                    child: Center(child: CircularProgressIndicator()),
                   ),
           ),
           Flexible(
@@ -40,6 +40,8 @@ class CreatePost extends GetWidget<PostController> {
                   color: Colors.white,
                 ),
                 maxLines: 4,
+                controller: controller.postTextController,
+                focusNode: controller.postTextFocusNode,
                 validator: (value) {
                   if (value!.isEmpty) {
                     return "say something..";
@@ -63,20 +65,18 @@ class CreatePost extends GetWidget<PostController> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 InkWell(
-                    child: Text(
-                  'Share',
-                  style: TextStyle(color: Colors.blue),
-                )
-                    //      onTap: controller.removeImage,
-                    ),
+                  child: Text(
+                    'Share',
+                    style: TextStyle(color: Colors.blue),
+                  ),
+                  onTap: controller.addPost,
+                ),
               ],
             ),
           ),
         ],
       )),
     );
-
-    ;
 
     // Container(
     //   child: SearchResult(model.peoples),

@@ -45,12 +45,20 @@ class Post extends Model {
     return id;
   }
   
-  String? get content {
-    return _content;
+  String get content {
+    try {
+      return _content!;
+    } catch(e) {
+      throw new DataStoreException(DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage, recoverySuggestion: DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion, underlyingException: e.toString());
+    }
   }
   
-  String? get postImageUrl {
-    return _postImageUrl;
+  String get postImageUrl {
+    try {
+      return _postImageUrl!;
+    } catch(e) {
+      throw new DataStoreException(DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage, recoverySuggestion: DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion, underlyingException: e.toString());
+    }
   }
   
   TemporalDateTime? get createdAt {
@@ -61,17 +69,21 @@ class Post extends Model {
     return _likes;
   }
   
-  String? get userID {
-    return _userID;
+  String get userID {
+    try {
+      return _userID!;
+    } catch(e) {
+      throw new DataStoreException(DataStoreExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage, recoverySuggestion: DataStoreExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion, underlyingException: e.toString());
+    }
   }
   
   List<Comment>? get comments {
     return _comments;
   }
   
-  const Post._internal({required this.id, content, postImageUrl, createdAt, likes, userID, comments}): _content = content, _postImageUrl = postImageUrl, _createdAt = createdAt, _likes = likes, _userID = userID, _comments = comments;
+  const Post._internal({required this.id, required content, required postImageUrl, createdAt, likes, required userID, comments}): _content = content, _postImageUrl = postImageUrl, _createdAt = createdAt, _likes = likes, _userID = userID, _comments = comments;
   
-  factory Post({String? id, String? content, String? postImageUrl, TemporalDateTime? createdAt, int? likes, String? userID, List<Comment>? comments}) {
+  factory Post({String? id, required String content, required String postImageUrl, TemporalDateTime? createdAt, int? likes, required String userID, List<Comment>? comments}) {
     return Post._internal(
       id: id == null ? UUID.getUUID() : id,
       content: content,
@@ -175,13 +187,13 @@ class Post extends Model {
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
       key: Post.CONTENT,
-      isRequired: false,
+      isRequired: true,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
       key: Post.POSTIMAGEURL,
-      isRequired: false,
+      isRequired: true,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
     
@@ -199,7 +211,7 @@ class Post extends Model {
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
       key: Post.USERID,
-      isRequired: false,
+      isRequired: true,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
     
