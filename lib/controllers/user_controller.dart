@@ -41,40 +41,9 @@ class UserController extends GetxController {
     currentUser.value = authUser;
   }
 
-  Future<void> getPosts() async {
-    List<PostItem>? _list = [
-      PostItem(
-          image: NetworkImage(
-            "https://randomuser.me/api/portraits/women/4.jpg",
-          ),
-          profileImage: NetworkImage(
-            "https://randomuser.me/api/portraits/women/4.jpg",
-          ),
-          username: 'Test',
-          isMine: true,
-          postId: 'Test'),
-      PostItem(
-          image: NetworkImage(
-            "https://randomuser.me/api/portraits/women/4.jpg",
-          ),
-          profileImage: NetworkImage(
-            "https://randomuser.me/api/portraits/women/4.jpg",
-          ),
-          username: 'Test',
-          isMine: true,
-          postId: 'Test')
-    ];
-
-    myPosts.clear();
-    if (_list != null) {
-      myPosts.addAll(_list);
-      print('Get the Kidz');
-    }
-  }
-
   @override
   void onReady() {
-    getPosts();
+    // getPosts();
     super.onReady();
   }
 

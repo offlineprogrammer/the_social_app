@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:the_social_app/models/ModelProvider.dart';
 import 'package:the_social_app/widgets/post_header.dart';
 
 class PostItem extends StatelessWidget {
@@ -6,14 +7,20 @@ class PostItem extends StatelessWidget {
   final String username;
   final bool isMine;
   final String postId;
+  final String postContents;
+
+  final Post post;
 
   final NetworkImage image;
-  const PostItem(
-      {required this.image,
-      required this.profileImage,
-      required this.username,
-      required this.isMine,
-      required this.postId});
+  const PostItem({
+    required this.image,
+    required this.profileImage,
+    required this.username,
+    required this.isMine,
+    required this.postId,
+    required this.postContents,
+    required this.post,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,10 +35,12 @@ class PostItem extends StatelessWidget {
           child: Column(
             children: [
               PostHeader(
-                  profileImage: profileImage,
-                  username: username,
-                  isMine: isMine,
-                  postId: postId),
+                profileImage: profileImage,
+                username: username,
+                isMine: isMine,
+                postId: postId,
+                post: post,
+              ),
               Divider(
                 height: 20,
                 thickness: 2,
@@ -45,6 +54,15 @@ class PostItem extends StatelessWidget {
                   fit: BoxFit.fill,
                 ),
               ),
+              Divider(
+                height: 20,
+                thickness: 2,
+              ),
+              Row(
+                children: [
+                  Text(postContents),
+                ],
+              )
             ],
           ),
         ),

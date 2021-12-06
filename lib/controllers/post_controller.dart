@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_authenticator/amplify_authenticator.dart';
+import 'package:amplify_datastore/amplify_datastore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -12,6 +14,8 @@ import 'package:the_social_app/widgets/post_item.dart';
 import 'package:amplify_storage_s3/amplify_storage_s3.dart';
 
 import 'package:uuid/uuid.dart';
+
+import 'navigation_controller.dart';
 
 class PostController extends GetxController {
   static PostController to = Get.find();
@@ -25,6 +29,9 @@ class PostController extends GetxController {
   RxBool isLoading = false.obs;
   final TextEditingController postTextController = TextEditingController();
   final FocusNode postTextFocusNode = FocusNode();
+  late StreamSubscription<QuerySnapshot<Post>> _subscription;
+
+  final NavigationController _navigationController = Get.find();
 
   @override
   void onInit() {
@@ -76,9 +83,12 @@ class PostController extends GetxController {
     Post _post = Post(
         content: postTextController.text,
         postImageUrl: imageUrl.value,
+        createdAt: TemporalDateTime.now(),
         userID: _authUser.userId);
 
     await _datastoreService.addPost(_post);
+
+    _navigationController.selectedIndex.value = 0;
     postTextController.clear();
     postTextController.clear();
   }

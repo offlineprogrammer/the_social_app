@@ -67,6 +67,7 @@ dependencies:
   uuid: ^3.0.4
   transparent_image: ^2.0.0
   cached_network_image: ^3.1.0
+  timeago: ^3.1.0
 
 
   # The following adds the Cupertino Icons font to your application.

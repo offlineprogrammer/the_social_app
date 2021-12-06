@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:the_social_app/controllers/post_controller.dart';
+import 'package:the_social_app/models/ModelProvider.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class PostHeader extends GetWidget<PostController> {
   const PostHeader({
@@ -8,12 +10,15 @@ class PostHeader extends GetWidget<PostController> {
     required this.username,
     required this.isMine,
     required this.postId,
+    required this.post,
   });
 
   final NetworkImage profileImage;
   final String username;
   final bool isMine;
   final String postId;
+
+  final Post post;
 
   @override
   Widget build(BuildContext context) {
@@ -31,103 +36,27 @@ class PostHeader extends GetWidget<PostController> {
                   radius: 25,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                child: Text(
-                  username,
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
             ],
           ),
         ),
         Expanded(
-          flex: 1,
-          child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-            Padding(
-                padding: const EdgeInsets.fromLTRB(12, 2, 12, 0),
-                child: InkWell(
-                  child: Icon(Icons.more_horiz, size: 25),
-                  onTap: () {
-                    isMine
-                        ? showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                //title: Text("Add Comment"),
-                                content: Container(
-                                  height: 160,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          InkWell(
-                                              child: Icon(Icons.close),
-                                              onTap: () {
-                                                Navigator.pop(context);
-                                              })
-                                        ],
-                                      ),
-                                      OutlinedButton(
-                                          child: Text("Delete"),
-                                          onPressed: () {
-                                            print("Delete this post" + postId);
-                                            controller.deletePost(postId);
-                                          }),
-                                      OutlinedButton(
-                                          child: Text("Update"),
-                                          onPressed: () {
-                                            print("Update this post" + postId);
-                                            //TODO: post update sayfasına yönlendir
-                                          }),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            })
-                        : showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                //title: Text("Add Comment"),
-                                content: Container(
-                                  height: 160,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          InkWell(
-                                              child: Icon(Icons.close),
-                                              onTap: () {
-                                                Navigator.pop(context);
-                                              })
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            });
-                  },
-                )
-                // Icon(
-                //   Icons.more_horiz,
-                //   size: 25,
-                // ),
-
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(username,
+                  style: TextStyle(fontSize: 16, color: Colors.grey)),
+              Text(
+                post.createdAt != null
+                    ? timeago.format(post.createdAt!.getDateTimeInUtc())
+                    : '',
+                style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 10,
                 ),
-          ]),
-        ),
+              )
+            ],
+          ),
+        )
       ],
     );
   }
