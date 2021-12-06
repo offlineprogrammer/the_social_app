@@ -94,6 +94,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.3.0-rc.2"
+  amplify_storage_s3:
+    dependency: "direct main"
+    description:
+      path: "packages/amplify_storage_s3"
+      ref: amplify-authenticator
+      resolved-ref: "8f9e15ae6dcdb8fac7e91f00c88221ff7a8a82be"
+      url: "git@github.com:aws-amplify/amplify-flutter.git"
+    source: git
+    version: "0.3.0-rc.2"
   async:
     dependency: transitive
     description:

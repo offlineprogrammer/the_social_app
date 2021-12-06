@@ -1,0 +1,16 @@
+{
+  "resourceName": "s3aa8aebae",
+  "policyUUID": "aa8aebae",
+  "bucketName": "thesocialappc1b569a152ef4d82a1b3e143727c5b2b",
+  "storageAccess": "authAndGuest",
+  "guestAccess": [
+    "READ"
+  ],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ],
+  "triggerFunction": "NONE",
+  "groupAccess": {}
+}

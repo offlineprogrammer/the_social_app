@@ -31,10 +31,11 @@ class AuthController extends GetxController {
     try {
       StreamSubscription hubSubscription =
           Amplify.Hub.listen([HubChannel.Auth], (hubEvent) async {
+        print(hubEvent.eventName);
         switch (hubEvent.eventName) {
           case "SIGNED_IN":
             {
-              await _authService.saveUser();
+              // await _authService.saveUser();
               print("USER IS SIGNED IN");
             }
             break;

@@ -18,13 +18,13 @@ type Post @model @auth(rules: [{allow: public}])  {
   likes: Int
   userID: ID
    comments: [Comment] @hasMany(indexName: "byPost", fields: ["id"])
+
 }
 
-type User @model @auth(rules: [{allow: public}]) {
-  id: ID!
-  email: AWSEmail!
-  avatarUrl: String
-  displayname: String
-  createdAt: AWSDateTime!
-  Posts: [Post] @hasMany
-} 
+type S3Object {
+  bucket: String!
+  region: String!
+  key: String!
+}
+
+

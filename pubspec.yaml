@@ -56,6 +56,11 @@ dependencies:
       url: git@github.com:aws-amplify/amplify-flutter.git
       path: packages/amplify_api
       ref: amplify-authenticator
+  amplify_storage_s3: 
+    git:
+      url: git@github.com:aws-amplify/amplify-flutter.git
+      path: packages/amplify_storage_s3
+      ref: amplify-authenticator
   font_awesome_flutter: ^9.1.0
   intl: ^0.17.0
   image_picker: ^0.8.3+2
@@ -94,6 +99,11 @@ dependency_overrides:
       url: git@github.com:aws-amplify/amplify-flutter.git
       path: packages/amplify_datastore_plugin_interface
       ref: amplify-authenticator
+  amplify_storage_s3: 
+    git:
+      url: git@github.com:aws-amplify/amplify-flutter.git
+      path: packages/amplify_storage_s3
+      ref: amplify-authenticator
 
   amplify_api: 
     git:
@@ -123,9 +133,14 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - images/facebook-logo.png
+    - images/google-logo.png
+    - images/amazon-logo.png
+    - images/applogo.png
+    - images/aws.png
+    - images/profile.png
+    - images/profile_image.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
