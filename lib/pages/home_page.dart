@@ -15,7 +15,8 @@ class HomePage extends GetWidget<UserController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color(0xffE1E5E4),
+        // backgroundColor: Color(0xffE1E5E4),
+        resizeToAvoidBottomInset: false,
         bottomNavigationBar: BottomBar(),
         body: Padding(
             padding: EdgeInsets.all(16),

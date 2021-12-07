@@ -36,6 +36,7 @@ class FeedController extends GetxController {
       Post.classType,
       sortBy: [Post.CREATEDAT.descending()],
     ).listen((QuerySnapshot<Post> snapshot) async {
+      feedPosts.clear();
       List<PostItem>? _list = await Future.wait(List.from(snapshot.items)
           .map((catData) => _buildPostItem(catData))
           .toList());
@@ -44,7 +45,7 @@ class FeedController extends GetxController {
       if (_list != null) {
         print(_list.length);
         feedPosts.addAll(_list);
-        print('Get the Kidz');
+        print('Posts list');
       }
     });
   }

@@ -12,74 +12,88 @@ class CreatePost extends GetWidget<PostController> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<PostController>(
-      initState: (_) => PostController.to
-          .imgFromCamera(_userController.currentUser.value!.userId),
-      builder: (s) => Expanded(
-          child: Column(
-        children: [
-          Obx(
-            () => (controller.imageUrl.value != null &&
-                    controller.imageUrl.value.isEmpty == false)
-                ? Container(
-                    height: 150,
-                    child: controller.isLoading.value == true
-                        ? const Center(child: CircularProgressIndicator())
-                        : Image.network(controller.imageUrl.value))
-                : Container(
-                    color: Color(0xffE1E5E4),
-                    height: 150,
-                    child: Center(child: CircularProgressIndicator()),
-                  ),
-          ),
-          Flexible(
-            flex: 5,
-            child: Container(
-              padding: EdgeInsets.only(left: 10),
-              child: TextFormField(
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-                maxLines: 4,
-                controller: controller.postTextController,
-                focusNode: controller.postTextFocusNode,
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return "say something..";
-                  } else {
-                    return null;
-                  }
-                },
-                // controller: postRepo.postTextController,
-                decoration: const InputDecoration(
-                    filled: true,
-                    //   fillColor: ThemeColor.textfieldColor,
-                    labelText: 'Say something...',
-                    labelStyle: TextStyle(color: Colors.white),
-                    hintText: 'Say something....'),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 10, 30, 0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                InkWell(
-                  child: Text(
-                    'Share',
-                    style: TextStyle(color: Colors.blue),
-                  ),
-                  onTap: controller.addPost,
-                ),
-              ],
-            ),
-          ),
-        ],
-      )),
-    );
-
-    // Container(
-    //   child: SearchResult(model.peoples),
-    // );
+        initState: (_) => PostController.to.getImage(),
+        builder: (s) => Obx(
+              () => controller.isLoading.value
+                  ? Expanded(
+                      child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: const [
+                        Text(
+                          'Wait for it..',
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.indigo,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        Center(child: CircularProgressIndicator()),
+                      ],
+                    ))
+                  : SingleChildScrollView(
+                      child: ListBody(children: [
+                        Container(
+                          padding: EdgeInsets.only(left: 10),
+                          child: TextFormField(
+                            style: const TextStyle(
+                              color: Colors.black,
+                            ),
+                            maxLines: 2,
+                            controller: controller.postTextController,
+                            focusNode: controller.postTextFocusNode,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "say something..";
+                              } else {
+                                return null;
+                              }
+                            },
+                            // controller: postRepo.postTextController,
+                            decoration: const InputDecoration(
+                                filled: true,
+                                fillColor: Colors.white,
+                                labelText: 'Say something...',
+                                labelStyle: TextStyle(color: Colors.grey),
+                                hintText: 'Say something....'),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            s.getImage();
+                          },
+                          child: AspectRatio(
+                            aspectRatio: 487 / 451,
+                            child: controller.imgFile != null
+                                ? Container(
+                                    decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                    fit: BoxFit.fill,
+                                    alignment: FractionalOffset.topCenter,
+                                    image: FileImage(controller.imgFile!),
+                                  )))
+                                : Container(),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 10, 30, 0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              InkWell(
+                                child: Text(
+                                  'Share',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.blue,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                onTap: controller.addPost,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ]),
+                    ),
+            ));
   }
 }

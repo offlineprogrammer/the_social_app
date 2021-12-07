@@ -54,15 +54,6 @@ class PostItem extends StatelessWidget {
                   fit: BoxFit.fill,
                 ),
               ),
-              Divider(
-                height: 20,
-                thickness: 2,
-              ),
-              Row(
-                children: [
-                  Text(postContents),
-                ],
-              )
             ],
           ),
         ),

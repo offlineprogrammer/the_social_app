@@ -25,7 +25,7 @@ class PostHeader extends GetWidget<PostController> {
     return Row(
       children: [
         Expanded(
-          flex: 4,
+          flex: 1,
           child: Row(
             children: [
               Padding(
@@ -40,6 +40,21 @@ class PostHeader extends GetWidget<PostController> {
           ),
         ),
         Expanded(
+          flex: 2,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(post.content,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  )),
+            ],
+          ),
+        ),
+        Expanded(
+          flex: 1,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [

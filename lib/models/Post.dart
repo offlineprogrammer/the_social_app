@@ -19,9 +19,7 @@
 
 // ignore_for_file: public_member_api_docs, file_names, unnecessary_new, prefer_if_null_operators, prefer_const_constructors, slash_for_doc_comments, annotate_overrides, non_constant_identifier_names, unnecessary_string_interpolations, prefer_adjacent_string_concatenation, unnecessary_const, dead_code
 
-import 'ModelProvider.dart';
 import 'package:amplify_datastore_plugin_interface/amplify_datastore_plugin_interface.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 
 
@@ -36,7 +34,6 @@ class Post extends Model {
   final int? _likes;
   final String? _userID;
   final String? _userDisplayName;
-  final List<Comment>? _comments;
   final String? _postS3Object;
 
   @override
@@ -87,17 +84,13 @@ class Post extends Model {
     }
   }
   
-  List<Comment>? get comments {
-    return _comments;
-  }
-  
   String? get postS3Object {
     return _postS3Object;
   }
   
-  const Post._internal({required this.id, required content, required postImageUrl, createdAt, likes, required userID, required userDisplayName, comments, postS3Object}): _content = content, _postImageUrl = postImageUrl, _createdAt = createdAt, _likes = likes, _userID = userID, _userDisplayName = userDisplayName, _comments = comments, _postS3Object = postS3Object;
+  const Post._internal({required this.id, required content, required postImageUrl, createdAt, likes, required userID, required userDisplayName, postS3Object}): _content = content, _postImageUrl = postImageUrl, _createdAt = createdAt, _likes = likes, _userID = userID, _userDisplayName = userDisplayName, _postS3Object = postS3Object;
   
-  factory Post({String? id, required String content, required String postImageUrl, TemporalDateTime? createdAt, int? likes, required String userID, required String userDisplayName, List<Comment>? comments, String? postS3Object}) {
+  factory Post({String? id, required String content, required String postImageUrl, TemporalDateTime? createdAt, int? likes, required String userID, required String userDisplayName, String? postS3Object}) {
     return Post._internal(
       id: id == null ? UUID.getUUID() : id,
       content: content,
@@ -106,7 +99,6 @@ class Post extends Model {
       likes: likes,
       userID: userID,
       userDisplayName: userDisplayName,
-      comments: comments != null ? List<Comment>.unmodifiable(comments) : comments,
       postS3Object: postS3Object);
   }
   
@@ -125,7 +117,6 @@ class Post extends Model {
       _likes == other._likes &&
       _userID == other._userID &&
       _userDisplayName == other._userDisplayName &&
-      DeepCollectionEquality().equals(_comments, other._comments) &&
       _postS3Object == other._postS3Object;
   }
   
@@ -150,7 +141,7 @@ class Post extends Model {
     return buffer.toString();
   }
   
-  Post copyWith({String? id, String? content, String? postImageUrl, TemporalDateTime? createdAt, int? likes, String? userID, String? userDisplayName, List<Comment>? comments, String? postS3Object}) {
+  Post copyWith({String? id, String? content, String? postImageUrl, TemporalDateTime? createdAt, int? likes, String? userID, String? userDisplayName, String? postS3Object}) {
     return Post(
       id: id ?? this.id,
       content: content ?? this.content,
@@ -159,7 +150,6 @@ class Post extends Model {
       likes: likes ?? this.likes,
       userID: userID ?? this.userID,
       userDisplayName: userDisplayName ?? this.userDisplayName,
-      comments: comments ?? this.comments,
       postS3Object: postS3Object ?? this.postS3Object);
   }
   
@@ -171,16 +161,10 @@ class Post extends Model {
       _likes = (json['likes'] as num?)?.toInt(),
       _userID = json['userID'],
       _userDisplayName = json['userDisplayName'],
-      _comments = json['comments'] is List
-        ? (json['comments'] as List)
-          .where((e) => e?['serializedData'] != null)
-          .map((e) => Comment.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
-          .toList()
-        : null,
       _postS3Object = json['postS3Object'];
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'content': _content, 'postImageUrl': _postImageUrl, 'createdAt': _createdAt?.format(), 'likes': _likes, 'userID': _userID, 'userDisplayName': _userDisplayName, 'comments': _comments?.map((Comment? e) => e?.toJson()).toList(), 'postS3Object': _postS3Object
+    'id': id, 'content': _content, 'postImageUrl': _postImageUrl, 'createdAt': _createdAt?.format(), 'likes': _likes, 'userID': _userID, 'userDisplayName': _userDisplayName, 'postS3Object': _postS3Object
   };
 
   static final QueryField ID = QueryField(fieldName: "post.id");
@@ -190,9 +174,6 @@ class Post extends Model {
   static final QueryField LIKES = QueryField(fieldName: "likes");
   static final QueryField USERID = QueryField(fieldName: "userID");
   static final QueryField USERDISPLAYNAME = QueryField(fieldName: "userDisplayName");
-  static final QueryField COMMENTS = QueryField(
-    fieldName: "comments",
-    fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (Comment).toString()));
   static final QueryField POSTS3OBJECT = QueryField(fieldName: "postS3Object");
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "Post";
@@ -245,13 +226,6 @@ class Post extends Model {
       key: Post.USERDISPLAYNAME,
       isRequired: true,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
-    ));
-    
-    modelSchemaDefinition.addField(ModelFieldDefinition.hasMany(
-      key: Post.COMMENTS,
-      isRequired: false,
-      ofModelName: (Comment).toString(),
-      associatedKey: Comment.POSTID
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(

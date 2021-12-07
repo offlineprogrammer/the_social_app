@@ -29,11 +29,26 @@ class PostController extends GetxController {
   final _picker = ImagePicker();
   RxString imageUrl = ''.obs;
   RxBool isLoading = false.obs;
+  File? imgFile;
   late Map<String, dynamic> _s3Object;
   final TextEditingController postTextController = TextEditingController();
   final FocusNode postTextFocusNode = FocusNode();
 
   final NavigationController _navigationController = Get.find();
+
+  Future<void> getImage() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      imgFile = File(pickedFile.path);
+      imgFile!.existsSync();
+
+      isImageSelected.value = true;
+    } else {
+      return null;
+    }
+    update();
+  }
 
   Future<void> imgFromCamera(String id) async {
     File _image;
@@ -43,6 +58,7 @@ class PostController extends GetxController {
     if (pickedFile != null) {
       _image = File(pickedFile.path);
       _image.existsSync();
+      imgFile = _image;
       final userImageKey = id + Uuid().v1() + '.png';
       var _uploadedImage =
           await _storageService.uploadImage(_image, userImageKey);
@@ -55,7 +71,15 @@ class PostController extends GetxController {
   }
 
   Future<void> addPost() async {
+    isLoading.value = true;
     AuthUser _authUser = await _authService.getCurrentUser();
+
+    final userImageKey = _authUser.userId + Uuid().v1() + '.png';
+    var _uploadedImage =
+        await _storageService.uploadImage(imgFile!, userImageKey);
+    _s3Object = jsonDecode(_uploadedImage);
+    imageUrl.value = _s3Object['url'];
+
     Post _post = Post(
         content: postTextController.text,
         postImageUrl: imageUrl.value,
@@ -69,5 +93,6 @@ class PostController extends GetxController {
     _navigationController.selectedIndex.value = 0;
     postTextController.clear();
     postTextController.clear();
+    isLoading.value = false;
   }
 }
