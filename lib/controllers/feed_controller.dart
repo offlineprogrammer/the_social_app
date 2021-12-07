@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
@@ -11,6 +12,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:the_social_app/models/ModelProvider.dart';
 import 'package:the_social_app/services/auth_service.dart';
 import 'package:the_social_app/services/datastore_service.dart';
+import 'package:the_social_app/services/storage_service.dart';
 import 'package:the_social_app/widgets/post_item.dart';
 import 'package:uuid/uuid.dart';
 
@@ -19,6 +21,7 @@ class FeedController extends GetxController {
   DataStoreService _datastoreService = DataStoreService();
 
   List<PostItem> feedPosts = RxList<PostItem>();
+  final StorageService _storageService = StorageService();
   late StreamSubscription<QuerySnapshot<Post>> _subscription;
 
   @override
@@ -32,10 +35,10 @@ class FeedController extends GetxController {
     _subscription = Amplify.DataStore.observeQuery(
       Post.classType,
       sortBy: [Post.CREATEDAT.descending()],
-    ).listen((QuerySnapshot<Post> snapshot) {
-      List<PostItem>? _list = List.from(snapshot.items)
+    ).listen((QuerySnapshot<Post> snapshot) async {
+      List<PostItem>? _list = await Future.wait(List.from(snapshot.items)
           .map((catData) => _buildPostItem(catData))
-          .toList();
+          .toList());
 
       feedPosts.clear();
       if (_list != null) {
@@ -44,29 +47,6 @@ class FeedController extends GetxController {
         print('Get the Kidz');
       }
     });
-
-    // List<PostItem>? _list = [
-    //   PostItem(
-    //       image: NetworkImage(
-    //         "https://randomuser.me/api/portraits/women/4.jpg",
-    //       ),
-    //       profileImage: NetworkImage(
-    //         "https://randomuser.me/api/portraits/women/4.jpg",
-    //       ),
-    //       username: 'Test',
-    //       isMine: true,
-    //       postId: 'Test'),
-    //   PostItem(
-    //       image: NetworkImage(
-    //         "https://randomuser.me/api/portraits/women/4.jpg",
-    //       ),
-    //       profileImage: NetworkImage(
-    //         "https://randomuser.me/api/portraits/women/4.jpg",
-    //       ),
-    //       username: 'Test',
-    //       isMine: true,
-    //       postId: 'Test')
-    // ];
   }
 
   @override
@@ -81,13 +61,15 @@ class FeedController extends GetxController {
     return feedPosts;
   }
 
-  PostItem _buildPostItem(catData) {
+  Future<PostItem> _buildPostItem(catData) async {
     Post _post = catData;
+    Map<String, dynamic> _s3Object = jsonDecode(_post.postS3Object!);
+    String _url = await _storageService.getImageUrl(_s3Object['key']);
     print(catData);
     return PostItem(
       post: _post,
       image: NetworkImage(
-        "https://randomuser.me/api/portraits/women/4.jpg",
+        _url,
       ),
       profileImage: NetworkImage(
         "https://randomuser.me/api/portraits/women/4.jpg",

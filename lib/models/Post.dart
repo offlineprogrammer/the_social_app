@@ -36,6 +36,7 @@ class Post extends Model {
   final int? _likes;
   final String? _userID;
   final List<Comment>? _comments;
+  final String? _postS3Object;
 
   @override
   getInstanceType() => classType;
@@ -81,9 +82,13 @@ class Post extends Model {
     return _comments;
   }
   
-  const Post._internal({required this.id, required content, required postImageUrl, createdAt, likes, required userID, comments}): _content = content, _postImageUrl = postImageUrl, _createdAt = createdAt, _likes = likes, _userID = userID, _comments = comments;
+  String? get postS3Object {
+    return _postS3Object;
+  }
   
-  factory Post({String? id, required String content, required String postImageUrl, TemporalDateTime? createdAt, int? likes, required String userID, List<Comment>? comments}) {
+  const Post._internal({required this.id, required content, required postImageUrl, createdAt, likes, required userID, comments, postS3Object}): _content = content, _postImageUrl = postImageUrl, _createdAt = createdAt, _likes = likes, _userID = userID, _comments = comments, _postS3Object = postS3Object;
+  
+  factory Post({String? id, required String content, required String postImageUrl, TemporalDateTime? createdAt, int? likes, required String userID, List<Comment>? comments, String? postS3Object}) {
     return Post._internal(
       id: id == null ? UUID.getUUID() : id,
       content: content,
@@ -91,7 +96,8 @@ class Post extends Model {
       createdAt: createdAt,
       likes: likes,
       userID: userID,
-      comments: comments != null ? List<Comment>.unmodifiable(comments) : comments);
+      comments: comments != null ? List<Comment>.unmodifiable(comments) : comments,
+      postS3Object: postS3Object);
   }
   
   bool equals(Object other) {
@@ -108,7 +114,8 @@ class Post extends Model {
       _createdAt == other._createdAt &&
       _likes == other._likes &&
       _userID == other._userID &&
-      DeepCollectionEquality().equals(_comments, other._comments);
+      DeepCollectionEquality().equals(_comments, other._comments) &&
+      _postS3Object == other._postS3Object;
   }
   
   @override
@@ -124,13 +131,14 @@ class Post extends Model {
     buffer.write("postImageUrl=" + "$_postImageUrl" + ", ");
     buffer.write("createdAt=" + (_createdAt != null ? _createdAt!.format() : "null") + ", ");
     buffer.write("likes=" + (_likes != null ? _likes!.toString() : "null") + ", ");
-    buffer.write("userID=" + "$_userID");
+    buffer.write("userID=" + "$_userID" + ", ");
+    buffer.write("postS3Object=" + "$_postS3Object");
     buffer.write("}");
     
     return buffer.toString();
   }
   
-  Post copyWith({String? id, String? content, String? postImageUrl, TemporalDateTime? createdAt, int? likes, String? userID, List<Comment>? comments}) {
+  Post copyWith({String? id, String? content, String? postImageUrl, TemporalDateTime? createdAt, int? likes, String? userID, List<Comment>? comments, String? postS3Object}) {
     return Post(
       id: id ?? this.id,
       content: content ?? this.content,
@@ -138,7 +146,8 @@ class Post extends Model {
       createdAt: createdAt ?? this.createdAt,
       likes: likes ?? this.likes,
       userID: userID ?? this.userID,
-      comments: comments ?? this.comments);
+      comments: comments ?? this.comments,
+      postS3Object: postS3Object ?? this.postS3Object);
   }
   
   Post.fromJson(Map<String, dynamic> json)  
@@ -153,10 +162,11 @@ class Post extends Model {
           .where((e) => e?['serializedData'] != null)
           .map((e) => Comment.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
           .toList()
-        : null;
+        : null,
+      _postS3Object = json['postS3Object'];
   
   Map<String, dynamic> toJson() => {
-    'id': id, 'content': _content, 'postImageUrl': _postImageUrl, 'createdAt': _createdAt?.format(), 'likes': _likes, 'userID': _userID, 'comments': _comments?.map((Comment? e) => e?.toJson()).toList()
+    'id': id, 'content': _content, 'postImageUrl': _postImageUrl, 'createdAt': _createdAt?.format(), 'likes': _likes, 'userID': _userID, 'comments': _comments?.map((Comment? e) => e?.toJson()).toList(), 'postS3Object': _postS3Object
   };
 
   static final QueryField ID = QueryField(fieldName: "post.id");
@@ -168,6 +178,7 @@ class Post extends Model {
   static final QueryField COMMENTS = QueryField(
     fieldName: "comments",
     fieldType: ModelFieldType(ModelFieldTypeEnum.model, ofModelName: (Comment).toString()));
+  static final QueryField POSTS3OBJECT = QueryField(fieldName: "postS3Object");
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "Post";
     modelSchemaDefinition.pluralName = "Posts";
@@ -220,6 +231,12 @@ class Post extends Model {
       isRequired: false,
       ofModelName: (Comment).toString(),
       associatedKey: Comment.POSTID
+    ));
+    
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: Post.POSTS3OBJECT,
+      isRequired: false,
+      ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
   });
 }
