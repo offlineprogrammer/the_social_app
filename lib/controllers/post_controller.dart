@@ -61,7 +61,8 @@ class PostController extends GetxController {
         postImageUrl: imageUrl.value,
         createdAt: TemporalDateTime.now(),
         userID: _authUser.userId,
-        postS3Object: json.encode(_s3Object));
+        postS3Object: json.encode(_s3Object),
+        userDisplayName: await _authService.getUserDisplayName());
 
     await _datastoreService.addPost(_post);
 

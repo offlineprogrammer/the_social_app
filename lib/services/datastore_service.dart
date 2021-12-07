@@ -12,4 +12,22 @@ class DataStoreService {
       throw e;
     }
   }
+
+  Future<void> updateDisplayNameForAllPosts(
+      String userId, String displayName) async {
+    try {
+      List<Post> _posts = await Amplify.DataStore.query(Post.classType,
+          where: Post.USERID.eq(userId));
+      if (_posts.length > 0) {
+        print('got _posts');
+        _posts.forEach((_post) async {
+          _post = _post.copyWith(userDisplayName: displayName);
+          await Amplify.DataStore.save(_post);
+        });
+      } else
+        return null;
+    } catch (e) {
+      throw e;
+    }
+  }
 }

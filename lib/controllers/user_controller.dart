@@ -41,12 +41,6 @@ class UserController extends GetxController {
     currentUser.value = authUser;
   }
 
-  @override
-  void onReady() {
-    // getPosts();
-    super.onReady();
-  }
-
   List<PostItem> getMyPosts() {
     return myPosts;
   }
@@ -54,6 +48,8 @@ class UserController extends GetxController {
   Future<void> updateDisplayName() async {
     await _authService.updateUserDisplayName(displaynameController.text);
     displayName.value = await _authService.getUserDisplayName();
+    await _datastoreService.updateDisplayNameForAllPosts(
+        currentUser.value!.userId, displayName.value);
     displaynameController.clear();
   }
 

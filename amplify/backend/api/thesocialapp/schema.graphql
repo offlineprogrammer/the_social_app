@@ -17,6 +17,7 @@ type Post @model @auth(rules: [{allow: public}])  {
   createdAt: AWSDateTime
   likes: Int
   userID: ID!
+  userDisplayName: String!
   comments: [Comment] @hasMany(indexName: "byPost", fields: ["id"])
   postS3Object: AWSJSON
 

@@ -74,7 +74,7 @@ class FeedController extends GetxController {
       profileImage: NetworkImage(
         "https://randomuser.me/api/portraits/women/4.jpg",
       ),
-      username: _post.content,
+      username: _post.userDisplayName,
       postContents: _post.content,
       isMine: true,
       postId: 'Test',
