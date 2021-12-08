@@ -88,4 +88,14 @@ class AuthService {
 
     await Amplify.Auth.updateUserAttributes(attributes: attributes);
   }
+
+  Future<void> signOut() async {
+    try {
+      await Amplify.Auth.signOut();
+      print('signOut');
+      await Amplify.DataStore.clear();
+    } on AuthException catch (e) {
+      print(e.message);
+    }
+  }
 }

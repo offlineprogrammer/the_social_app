@@ -5,7 +5,13 @@ import 'package:amplify_authenticator/amplify_authenticator.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:the_social_app/pages/sign_in_page.dart';
 import 'package:the_social_app/services/auth_service.dart';
+
+import 'feed_controller.dart';
+import 'navigation_controller.dart';
+import 'post_controller.dart';
+import 'user_controller.dart';
 
 enum EmailSignInFormType { signIn, register, confirm }
 
@@ -40,6 +46,22 @@ class AuthController extends GetxController {
             break;
           case "SIGNED_OUT":
             {
+              //Get.rootDelegate.offNamed('/signin');
+              Get.offAll(() => SignInPage());
+              Get.reloadAll(force: true);
+
+              //Get.reset();
+              // Get.deleteAll();
+              // Get.delete<AuthController>();
+              // Get.delete<UserController>();
+              // Get.delete<NavigationController>();
+              // Get.delete<PostController>();
+              // Get.delete<FeedController>();
+              // Get.offAll(() => SignInPage());
+              // Get.reloadAll();
+              // Get.resetRootNavigator();
+              // Get.reset(); //.appUpdate().offAll();
+              // Get.offAll(() => SignInPage());
               print("USER IS SIGNED OUT");
             }
             break;

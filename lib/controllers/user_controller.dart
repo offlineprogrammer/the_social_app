@@ -53,39 +53,7 @@ class UserController extends GetxController {
     displaynameController.clear();
   }
 
-  // Future<void> setUserImage() async {
-  //   File _image;
-  //   final picker = ImagePicker();
-
-  //   try {
-  //     isLoading.value = true;
-  //     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-  //     if (pickedFile != null) {
-  //       _image = File(pickedFile.path);
-  //       _image.existsSync();
-  //       final userImageKey = currentUser.value!.id + Uuid().v1() + '.png';
-  //       Map<String, String> metadata = <String, String>{};
-  //       metadata['name'] = currentUser.value!.id;
-  //       metadata['desc'] = 'A test file';
-  //       S3UploadFileOptions options = S3UploadFileOptions(
-  //           accessLevel: StorageAccessLevel.guest, metadata: metadata);
-  //       UploadFileResult result = await Amplify.Storage.uploadFile(
-  //           key: userImageKey, local: _image, options: options);
-  //       GetUrlOptions _getUrlOptions = GetUrlOptions(expires: 60000);
-  //       GetUrlResult resultUrl = await Amplify.Storage.getUrl(
-  //           key: userImageKey, options: _getUrlOptions);
-  //       currentUser.value =
-  //           currentUser.value!.copyWith(avatarUrl: userImageKey);
-  //       imageUrl.value = resultUrl.url;
-  //       // await _datastoreService.saveUser(currentUser.value!);
-
-  //     } else {
-  //       return null;
-  //     }
-  //   } catch (e) {
-  //     print(e.toString());
-  //   } finally {
-  //     isLoading.value = false;
-  //   }
-  // }
+  Future<void> signOut() async {
+    await _authService.signOut();
+  }
 }

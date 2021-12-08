@@ -31,7 +31,7 @@ class PostHeader extends GetWidget<PostController> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(12, 2, 12, 0),
                 child: CircleAvatar(
-                  backgroundImage: const AssetImage('images/applogo.png'),
+                  backgroundImage: const AssetImage('images/user.jpg'),
                   backgroundColor: Colors.grey[400],
                   radius: 25,
                 ),

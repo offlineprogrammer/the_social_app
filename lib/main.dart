@@ -4,6 +4,7 @@ import '/services/amplify_service.dart';
 import 'package:flutter/material.dart';
 import 'package:amplify_authenticator/amplify_authenticator.dart';
 
+import 'app_routes.dart';
 import 'controllers/bindings/controllers_bindings.dart';
 import 'pages/sign_in_page.dart';
 
@@ -45,9 +46,9 @@ class _MyAppState extends State<MyApp> {
       initialBinding: ControllersBindings(),
       title: 'Amplify SocialApp',
       theme: ThemeData(
-        primarySwatch: Colors.indigo,
+        primarySwatch: Colors.orange,
       ),
-      // home: authenticator,
+      getPages: AppRoutes.routes,
       home: _amplifyConfigured ? SignInPage() : _waitForAmplify(),
     );
   }

@@ -15,36 +15,17 @@ class UserProfile extends GetWidget<UserController> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Obx(
-              () => (controller.imageUrl.value != null &&
-                      controller.imageUrl.value.isEmpty == false)
-                  ? Container(
-                      height: 150,
-                      child: controller.isLoading.value == true
-                          ? const Center(child: CircularProgressIndicator())
-                          : Image.network(controller.imageUrl.value))
-                  : Container(
-                      color: Color(0xffE1E5E4),
-                      height: 150,
-                      child: Image.asset(
-                        'images/profile_image.png',
-                        fit: BoxFit.contain,
-                      ),
-                    ),
+            Container(
+              color: Color(0xffE1E5E4),
+              height: 150,
+              child: Image.asset(
+                'images/user.jpg',
+                fit: BoxFit.contain,
+              ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 8,
             ),
-            new Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                new IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.camera_alt),
-                ),
-              ],
-            ),
-            SizedBox(height: 20),
             Obx(
               () => (controller.currentUser.value != null &&
                       controller.displayName.value.isEmpty == false)
@@ -59,7 +40,7 @@ class UserProfile extends GetWidget<UserController> {
                       textAlign: TextAlign.center,
                     ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Obx(
               () => (controller.currentUser.value != null &&
                       controller.email.value.isEmpty == false)
@@ -113,7 +94,16 @@ class UserProfile extends GetWidget<UserController> {
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 10),
+            SizedBox(
+              width: 200,
+              child: ElevatedButton(
+                onPressed: controller.signOut,
+                child: Text(
+                  'Sign out',
+                ),
+              ),
+            ),
           ],
         ),
       ),

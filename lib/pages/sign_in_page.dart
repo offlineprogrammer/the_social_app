@@ -17,7 +17,7 @@ class SignInPage extends GetWidget<AuthController> {
       ),
       body: Authenticator(
         child: HomePage(),
-        useAmplifyTheme: true, // const Text('You are logged in!'),
+        //useAmplifyTheme: true,
       ),
       backgroundColor: Colors.grey[200],
     );

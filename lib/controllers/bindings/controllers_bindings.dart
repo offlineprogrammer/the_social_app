@@ -9,6 +9,12 @@ import '../user_controller.dart';
 class ControllersBindings extends Bindings {
   @override
   void dependencies() {
+//     Get.put<AuthController>(AuthController(), permanent: true);
+//     Get.put<UserController>(UserController(), permanent: true);
+//     Get.put<NavigationController>(NavigationController(), permanent: true);
+// Get.put<PostController>(PostController(), permanent: true);
+// Get.put<FeedController>(FeedController(), permanent: true);
+
     Get.lazyPut<AuthController>(() => AuthController());
     Get.lazyPut<UserController>(() => UserController());
     Get.lazyPut<NavigationController>(() => NavigationController());
